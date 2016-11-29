@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SVG Animation</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link href = "./css/styles.css" rel="stylesheet">
+        <script src="./js/Snap.svg-0.4.1/dist/snap.svg-min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	</head>
+	<body class = "bg-home">
+        <script>
+            function animateName()
+            {
+                var go = document.getElementById("ryan-svg");
+                //go.setAttribute("opacity", 0);
+                var name = Snap(document.getElementById("ryan-svg"));
+                var letters = name.selectAll('g');
+                console.log(letters[letters.length-1]);
+                animateLetter(letters, letters.length-1, letters[letters.length-1].node.childElementCount-1);
+            }
+            function animateLetter(letters, currentLetterIndex, currentStrokeIndex)
+            {
+                console.log("Hi");
+                var pathLength = 0;
+                var endVal;
+                var length = 0;
+                /* Find the Corner Point*/
+                //For every path
+                    //For every point
+                        //add x to xarray
+                        //add y to yarray
+                //find min x and y values
+                //create cornerPoint with these values
+                var xArray = new Array();
+                var yArray = new Array();
+                for(var i = 0; i < letters[currentLetterIndex].node.childElementCount; i++)
+                {
+                    
+                    var currentPath = letters[currentLetterIndex].select('path:nth-child('+(i+1)+')');
+                    if(currentPath != null)
+                    {
+                        length = currentPath.getTotalLength();
+                        xArray.push(currentPath.getPointAtLength(0).x);
+                        xArray.push(currentPath.getPointAtLength(length).x);
+                        yArray.push(currentPath.getPointAtLength(0).y);
+                        yArray.push(currentPath.getPointAtLength(length).y);
+                    } else
+                    {
+                        currentPath = letters[currentLetterIndex].select('line:nth-child('+(i+1)+')');
+                        length = Math.sqrt(Math.pow(currentPath.node.x2.baseVal.value - currentPath.node.x1.baseVal.value, 2) + Math.pow(currentPath.node.y2.baseVal.value - currentPath.node.y1.baseVal.value, 2));
+                        xArray.push(currentPath.node.x1.baseVal.value);
+                        xArray.push(currentPath.node.x2.baseVal.value);
+                        yArray.push(currentPath.node.y1.baseVal.value);
+                        yArray.push(currentPath.node.y2.baseVal.value);
+                    }
+                }
+                var minX = 1000000;
+                for(var i = 0; i < xArray.length; i++)
+                {
+                    if(xArray[i] < minX)
+                    {
+                        minX = xArray[i];
+                    }
+                }
+                var minY = 1000000;
+                for(var i = 0; i < yArray.length; i++)
+                {
+                    if(yArray[i] < minY)
+                    {
+                        minY = yArray[i];
+                    }
+                }
+                cornerPoint = {x:minX, y:minY};
+                console.log("cpx: " + cornerPoint.x + "\ncpy: " + cornerPoint.y);
+                /* Code Below here is good*/
+                var point1 = {x:0, y:0};
+                var point2 = {x:0, y:0};
+                var point3 = {x:0, y:0};
+                var path = letters[currentLetterIndex].select('path:nth-child('+(currentStrokeIndex+1)+')');                    
+
+                if(path != null)
+                {
+                    length = path.getTotalLength();
+                    point1 = path.getPointAtLength(0);
+                    point2 = path.getPointAtLength(length);
+                    point3 = path.getPointAtLength(10);
+
+
+                } else
+                {
+                    path = letters[currentLetterIndex].select('line:nth-child('+(currentStrokeIndex+1)+')');
+                    length = Math.sqrt(Math.pow(path.node.x2.baseVal.value - path.node.x1.baseVal.value, 2) + Math.pow(path.node.y2.baseVal.value - path.node.y1.baseVal.value, 2));
+                    point1 = {x:path.node.x1.baseVal.value, y:path.node.y1.baseVal.value};
+                    point2 = {x:path.node.x2.baseVal.value, y:path.node.y2.baseVal.value};
+                    point3 = {x:(point1.x + point2.x)/2, y: (point1.y + point2.y)/2};
+                }
+                console.log(path);
+                console.log("x1 " + point1.x + "y1: " + point1.y + "x2 " + point2.x + "y2 " + point2.y);
+                console.log("d1 " + Math.sqrt(Math.pow(cornerPoint.x-point1.x, 2) + Math.pow(cornerPoint.y-point1.y, 2)) + "\nd2 " +  Math.sqrt(Math.pow(cornerPoint.x- point2.x, 2) + Math.pow(cornerPoint.y - point2.y, 2)));
+                if(Math.sqrt(Math.pow(cornerPoint.x-point1.x, 2) + Math.pow(cornerPoint.y - point1.y, 2)) <= Math.sqrt(Math.pow(cornerPoint.x - point2.x, 2) + Math.pow(cornerPoint.y - point2.y, 2)))
+                {
+                    if(Math.round(point1.x) == Math.round(point2.x) && Math.round(point1.y) != Math.round(point2.y) && Math.round(point1.x) != Math.round(point3.x))
+                    {
+                        endVal = length*2;    
+                    } else
+                    {
+                        endVal = 0;
+                    }
+                } else
+                {
+                    if(Math.round(point1.x) == Math.round(point2.x) && Math.round(point1.y) != Math.round(point2.y) && Math.round(point1.x) != Math.round(point3.x))
+                    {
+                        endVal = 0;    
+                    } else
+                    {
+                        endVal = length*2;
+                    }
+                }
+
+                if(currentStrokeIndex < letters[currentLetterIndex].node.childElementCount-1)
+                {
+                    var previousPath = letters[currentLetterIndex].select('path:nth-child('+(currentStrokeIndex+2)+')');
+                    var previousPoint1;
+                    var previousPoint2;
+                    var previousLength;
+                    if(previousPath != null)
+                    {
+                        previousLength = previousPath.getTotalLength();
+                        previousPoint1 = previousPath.getPointAtLength(0);
+                        previousPoint2 = previousPath.getPointAtLength(previousLength);
+
+                    } else
+                    {
+                        previousPath = letters[currentLetterIndex].select('line:nth-child('+(currentStrokeIndex+2)+')');
+                        previousLength = Math.sqrt(Math.pow(previousPath.node.x2.baseVal.value - previousPath.node.x1.baseVal.value, 2) + Math.pow(previousPath.node.y2.baseVal.value - previousPath.node.y1.baseVal.value, 2));
+                        previousPoint1 = {x:previousPath.node.x1.baseVal.value, y:previousPath.node.y1.baseVal.value};
+                        previousPoint2 = {x:previousPath.node.x2.baseVal.value, y:previousPath.node.y2.baseVal.value};
+                    }
+                    if(comparePoints(point1, previousPoint1) + comparePoints(point1, previousPoint2) + comparePoints(point2, previousPoint1) + comparePoints(point2, previousPoint2) > 0)
+                    {
+                        endVal=0;
+                    }
+                }
+                path.attr({"stroke-dasharray": length, stroke:"#6688ff", "stroke-dashoffset":length});
+                path.animate({"stroke-dashoffset": endVal}, length*1.5, mina.linear, function(){
+                    if(currentStrokeIndex > 0)
+                    {
+                        animateLetter(letters, currentLetterIndex, currentStrokeIndex-1);
+                    }else if(currentLetterIndex > 0)
+                    {
+                        animateLetter(letters, currentLetterIndex-1, letters[currentLetterIndex-1].node.childElementCount-1)
+                    } else
+                    {
+                    }
+                }
+                );
+            }
+            function comparePoints(p1, p2)
+            {
+                if(Math.round(p1.x) == Math.round(p2.x) && Math.round(p1.y) == Math.round(p2.y))
+                {
+                    return 1;
+                }
+                return 0;
+            }
+        </script>
+        <div id="name-div" class="white center-vertical" onclick="animateName()">
+            <!--<svg id="name-svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110.64 28.04">
+                <title>Roboto SVG Test</title>
+                <g>
+                    <path d="M156.3,349.6v11.57H154.2V335.59h8.53a9.72,9.72,0,0,1,6.31,1.8,6.41,6.41,0,0,1,2.2,5.26,6,6,0,0,1-1.17,3.65,6.62,6.62,0,0,1-3.31,2.35,5.57,5.57,0,0,1,3.42,2.14,6.71,6.71,0,0,1,1,3.86v2.41a7.55,7.55,0,0,0,.28,2.14,3.34,3.34,0,0,0,.93,1.55v.42h-2.14a3.51,3.51,0,0,1-.91-1.78,10.52,10.52,0,0,1-.26-2.37v-2.34a4.74,4.74,0,0,0-1.52-3.72,6.14,6.14,0,0,0-4.25-1.36Zm0-1.79h6.17q3.46,0,5.06-1.4a4.75,4.75,0,0,0,1.6-3.77,4.85,4.85,0,0,0-1.59-3.89,7.27,7.27,0,0,0-4.83-1.36H156.3Z" transform="translate(-154.07 -333.62)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10;stroke-width:0.25px"/>
+                </g>
+                <g>
+                    <path d="M176.06,351.38a10.22,10.22,0,0,1,2.3-6.89,8.28,8.28,0,0,1,12.22,0,10.22,10.22,0,0,1,2.3,6.89V352a10.24,10.24,0,0,1-2.29,6.9,8.31,8.31,0,0,1-12.23,0,10.21,10.21,0,0,1-2.3-6.9Zm2.11.58a9.06,9.06,0,0,0,1.67,5.55,5.9,5.9,0,0,0,9.27,0,9,9,0,0,0,1.68-5.55v-.58a9,9,0,0,0-1.69-5.52,5.86,5.86,0,0,0-9.26,0,9.05,9.05,0,0,0-1.67,5.52Z" transform="translate(-154.07 -333.62)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10;stroke-width:0.25px"/>
+                </g>
+                <g>
+                    <path d="M212.61,352.19a11,11,0,0,1-1.93,6.81,6.32,6.32,0,0,1-5.33,2.54,7.36,7.36,0,0,1-3.59-.83,6.59,6.59,0,0,1-2.47-2.38l-.35,2.85h-1.65V333.75h2.11v11.32a6.8,6.8,0,0,1,2.43-2.42,6.88,6.88,0,0,1,3.5-.85,6.2,6.2,0,0,1,5.36,2.73,12.38,12.38,0,0,1,1.93,7.29Zm-2.13-.37a11.12,11.12,0,0,0-1.41-5.92,4.59,4.59,0,0,0-4.17-2.28,5.48,5.48,0,0,0-3.52,1.06,6.5,6.5,0,0,0-2,2.75v8.7a5.62,5.62,0,0,0,5.55,3.57,4.69,4.69,0,0,0,4.15-2,9.6,9.6,0,0,0,1.39-5.48Z" transform="translate(-154.07 -333.62)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10;stroke-width:0.25px"/>
+                </g>
+                <g>
+                    <path d="M216.14,351.38a10.22,10.22,0,0,1,2.3-6.89,8.28,8.28,0,0,1,12.22,0,10.22,10.22,0,0,1,2.3,6.89V352a10.24,10.24,0,0,1-2.29,6.9,8.31,8.31,0,0,1-12.23,0,10.21,10.21,0,0,1-2.3-6.9Zm2.11.58a9.06,9.06,0,0,0,1.67,5.55,5.9,5.9,0,0,0,9.27,0,9,9,0,0,0,1.68-5.55v-.58a9,9,0,0,0-1.69-5.52,5.86,5.86,0,0,0-9.26,0,9.05,9.05,0,0,0-1.67,5.52Z" transform="translate(-154.07 -333.62)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10;stroke-width:0.25px"/>
+                </g>
+                <g>
+                    <path d="M240.64,337.28v4.87h4.18v1.72h-4.18v12.39a4.05,4.05,0,0,0,.68,2.65,2.26,2.26,0,0,0,1.8.78,6.17,6.17,0,0,0,.75,0q.36,0,.85-.15l.32,1.56a4.38,4.38,0,0,1-1,.34,6,6,0,0,1-1.24.13,3.94,3.94,0,0,1-3.12-1.27,6,6,0,0,1-1.12-4V343.87h-3.29v-1.72h3.29v-4.87Z" transform="translate(-154.07 -333.62)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10;stroke-width:0.25px"/>
+                </g>
+                <g>
+                    <path d="M247.76,351.38a10.22,10.22,0,0,1,2.3-6.89,8.28,8.28,0,0,1,12.22,0,10.22,10.22,0,0,1,2.3,6.89V352a10.24,10.24,0,0,1-2.29,6.9,8.31,8.31,0,0,1-12.23,0,10.21,10.21,0,0,1-2.3-6.9Zm2.11.58a9.06,9.06,0,0,0,1.67,5.55,5.9,5.9,0,0,0,9.27,0,9,9,0,0,0,1.68-5.55v-.58a9,9,0,0,0-1.69-5.52,5.86,5.86,0,0,0-9.26,0,9.05,9.05,0,0,0-1.67,5.52Z" transform="translate(-154.07 -333.62)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10;stroke-width:0.25px"/>
+                </g>
+            </svg>
+            <svg id="avenir-svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 102.6 25.92">
+                <title>Avenir SVG Test</title>
+                <g>
+                    <path d="M159.43,335.69h2.84l10.83,25.48h-3.53L167,354.91H154.24l-2.63,6.26h-3.42Zm1.37,3.89h-.07l-5.29,12.53h10.4Z" transform="translate(-148.19 -335.69)" style="fill:#fff"/>
+                </g>
+                <g>
+                    <path d="M183,361.17h-3.1L173,344.32h3.28l5.26,13.21h.07l5-13.21h3Z" transform="translate(-148.19 -335.69)" style="fill:#fff"/>
+                </g>
+                <g>
+                    <path d="M207.74,358.11a8.64,8.64,0,0,1-7.49,3.49c-5.29,0-8.53-4-8.53-8.85,0-5.22,3.67-8.85,8.64-8.85,4.75,0,8,3.24,8,8.82v.9H194.74a5.63,5.63,0,0,0,5.51,5.4,6.27,6.27,0,0,0,5.36-2.56Zm-2.41-6.87a4.68,4.68,0,0,0-5.08-4.75,5.21,5.21,0,0,0-5.51,4.75Z" transform="translate(-148.19 -335.69)" style="fill:#fff"/>
+                </g>
+                <g>
+                    <path d="M212.71,348.32c0-1.55-.14-2.88-.14-4h2.66c0,.9.07,1.84.07,2.77h.07a6.12,6.12,0,0,1,5.62-3.2c4.43,0,6.41,2.81,6.41,6.88v10.4h-2.81V351.06c0-2.81-1.22-4.57-3.85-4.57-3.64,0-5.22,2.63-5.22,6.48v8.21h-2.81Z" transform="translate(-148.19 -335.69)" style="fill:#fff"/>
+                </g>
+                <g>
+                    <path d="M234.38,335.69a2.05,2.05,0,0,1,2.05,2.05,2.05,2.05,0,0,1-4.1,0A2.05,2.05,0,0,1,234.38,335.69Zm-1.4,8.64h2.81v16.85H233Z" transform="translate(-148.19 -335.69)" style="fill:#fff"/>
+                </g>
+                <g>
+                    <path d="M241.36,348.32c0-1.55-.14-2.88-.14-4h2.66c0,.9.07,1.84.07,2.77H244a6.12,6.12,0,0,1,5.62-3.2,3.34,3.34,0,0,1,1.15.18l-.18,2.84a5.31,5.31,0,0,0-1.51-.22c-3.42,0-4.93,2.41-4.93,6.26v8.21h-2.81Z" transform="translate(-148.19 -335.69)" style="fill:#fff"/>
+                </g>
+            </svg>
+            <svg class = "letter" id="name2-svg" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 505 289.41">
+                <title>Go</title>
+                <g>
+                    <path d="M432,432c-39.5,0-72,32.5-72,72s32.5,72,72,72,72-32.5,72-72S471.5,432,432,432Z" transform="translate(0.5 -288.59)" style="fill:none;stroke:#fff;stroke-miterlimit:10"/>
+                </g>
+                <g>
+                    <path d="M288,361.5c-3-4.24-57.38-78.53-144-72C74.27,294.76,0,351.16,0,433.5c0,77.79,65.74,143.84,144,144,70.51.14,132.82-53.26,144-126" transform="translate(0.5 -288.59)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10"/>
+                    <line x1="288.5" y1="161.41" x2="144.5" y2="161.41" style="fill:none;stroke:#fff;stroke-miterlimit:10"/>
+                </g>
+            </svg>-->
+            <svg class="letter" id="ryan-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2181 436" preserveAspectRatio="xMidYMid meet">
+                <title>Ryan Sullivan Name</title>
+                <g id="Layer-N2">
+                    <path id="N2" d="M2356.09,504V432c0-39.5-32.5-72-72-72s-72,32.5-72,72" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <line id="N1" x1="2034.74" y1="173" x2="2034.74" y2="290" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Layer-A2">
+                    <line id="A2" x1="1962.74" y1="245.65" x2="1962.74" y2="290.65" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <path id="A1" d="M2140.09,387.65v72c-36.35,39.54-87.14,47.84-117,27-17.05-11.9-27.06-33.34-27-54,.11-37.6,36.37-67.28,72-72C2108.49,355.3,2137,384.44,2140.09,387.65Z" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Layer-V1">
+                    <line id="V2" x1="1674.74" y1="290" x2="1746.74" y2="146" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <line id="V1" x1="1602.74" y1="146" x2="1674.74" y2="290" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Layer-I1">
+                    <path id="I2" d="M1708.09,333a9,9,0,1,1,9-9A9,9,0,0,1,1708.09,333Z" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <line id="I1" x1="1530.74" y1="146" x2="1530.74" y2="290" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Layer-L2">
+                    <line id="L1" x1="1458.74" y1="2" x2="1458.74" y2="290" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Layer-L1">
+                    <line id="L1-2" data-name="L1" x1="1386.74" y1="2" x2="1386.74" y2="290" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Layer-U1">
+                    <line id="U2" x1="1314.74" y1="218" x2="1314.74" y2="290" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <path id="U1" d="M1492.09,360v72c0,39.5-32.5,72-72,72s-72-32.5-72-72V360" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Layer-S1">
+                    <path id="S1" d="M1276.26,288c0-39.5-32.5-72-72-72-45.73,0-74.7,43.56-72,72,1.45,15.31,25,34.21,72,72,60.15,48.33,70.55,56.69,72,72,2.7,28.44-26.27,72-72,72-39.5,0-72-32.5-72-72" transform="translate(-177.34 -214)" style="fill:#fff;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Letter-N1">
+                    <path id="N2-2" data-name="N2" d="M971.34,504V432c0-39.5-32.5-72-72-72s-72,32.5-72,72" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <line id="N1-2" data-name="N1" x1="650" y1="173" x2="650" y2="290" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Letter-A1">
+                    <line id="A2-2" data-name="A2" x1="578" y1="245.65" x2="578" y2="290.65" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <path id="A1-2" data-name="A1" d="M755.34,387.65v72c-36.35,39.54-87.14,47.84-117,27-17.05-11.9-27.06-33.34-27-54,.11-37.6,36.37-67.28,72-72C723.75,355.3,752.29,384.44,755.34,387.65Z" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Letter-Y1">
+                    <path id="Y2" d="M539.34,432V576c0,39.5-32.5,72-72,72s-72-32.5-72-72" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <path id="Y1" d="M539.34,360v72c0,39.5-32.5,72-72,72s-72-32.5-72-72V360" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+                <g id="Letter-R1">
+                    <path id="R2" d="M323.34,504a392.08,392.08,0,0,0-36-90,390.81,390.81,0,0,0-36-54" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                    <path id="R1" d="M179.34,360h72c39.5,0,72-32.5,72-72s-32.5-72-72-72h-72V504" transform="translate(-177.34 -214)" style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:4px"/>
+                </g>
+            </svg>
+        </div>
+	</body>
+</html>

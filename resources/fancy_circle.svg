@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="fancy_circle" viewBox="0 0 184 184" onclick="animateFancyCircle()">
+  <title>
+    fancy_circle
+  </title>
+  <g id="_Group_" data-name="<Group>">
+    <circle id="fancy_circle_stroke" cx="92" cy="92" r="90" style="fill:none;stroke-dasharray:11.9684476852417,8.976335525512695;stroke-miterlimit:10;stroke-width:4;stroke:#27aae1"/>
+  </g>
+  <path id="fancy_circle_center" d="M288 288c39.5 0 72 32.5 72 72s-32.5 72-72 72-72-32.5-72-72S248.5 288 288 288Z" transform="translate(-196 -268)" fill="#ed1c24"/>
+  <path d="M216 360c0-39.5 32.5-72 72-72s72 32.5 72 72-32.5 72-72 72S216 399.5 216 360Z" transform="translate(-196 -268)" style="fill:none;stroke-miterlimit:10;stroke:#231f20"/>
+  <path id="fancy_circle_ellipse1" d="M270 332v56c0 4.39-4.06 8-9 8s-9-3.61-9-8V332c0-4.39 4.06-8 9-8S270 327.61 270 332Z" transform="translate(-196 -268)" fill="#fff"/>
+  <path d="M252 388c0 4.39 4.06 8 9 8s9-3.61 9-8V332c0-4.39-4.06-8-9-8s-9 3.61-9 8Z" transform="translate(-196 -268)" style="fill:none;stroke-miterlimit:10;stroke:#231f20"/>
+  <path id="fancy_circle_ellipse2" d="M297 332v56c0 4.39-4.06 8-9 8s-9-3.61-9-8V332c0-4.39 4.06-8 9-8S297 327.61 297 332Z" transform="translate(-196 -268)" fill="#fff"/>
+  <path d="M279 388c0 4.39 4.06 8 9 8s9-3.61 9-8V332c0-4.39-4.06-8-9-8s-9 3.61-9 8Z" transform="translate(-196 -268)" style="fill:none;stroke-miterlimit:10;stroke:#231f20"/>
+  <path id="fancy_circle_ellipse3" d="M324 332v56c0 4.39-4.06 8-9 8s-9-3.61-9-8V332c0-4.39 4.06-8 9-8S324 327.61 324 332Z" transform="translate(-196 -268)" fill="#fff"/>
+  <path d="M306 388c0 4.39 4.06 8 9 8s9-3.61 9-8V332c0-4.39-4.06-8-9-8s-9 3.61-9 8Z" transform="translate(-196 -268)" style="fill:none;stroke-miterlimit:10;stroke:#231f20"/>
+</svg>

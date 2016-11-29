@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Movies & TV Shows</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link href = "/css/styles.css" rel="stylesheet">
+        <script src="/js/Snap.svg-0.4.1/dist/snap.svg-min.js"></script>
+
+	
+	</head>
+	<body class = "bg-page1">
+        <h1 class="center-horizontal">Ryan Sullivan</h1>
+        <div id = "circle-div" class = "svg-circle-div center-all">
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145 145" >
+                <defs>
+                    <style>.cls-1{fill:blue;}.cls-2{fill:none;stroke:#231f20;stroke-miterlimit:10;}</style>
+                </defs>
+                <title>circle</title>
+                <path id="circle-path" class="cls-1" d="M288,288c39.5,0,72,32.5,72,72s-32.5,72-72,72-72-32.5-72-72S248.5,288,288,288Z" transform="translate(-215.5 -287.5)" onmouseover="var s=document.getElementById('circle-path'); s.style.fill = '#abcdef'; s=document.getElementById('circle-div'); s.style.height = '150px'; s.style.width = '150px';"/>
+                <path class="cls-2 svg-circle" d="M216,360c0-39.5,32.5-72,72-72s72,32.5,72,72-32.5,72-72,72S216,399.5,216,360Z" transform="translate(-215.5 -287.5)"/>
+            </svg>
+        </div>
+        <div id="fancy_circle_div" class = "svg-circle-div center-horizontal">
+            <script type="text/javascript">
+                    function animateFancyCircle()
+                    {
+                        var circle = document.getElementById("fancy_circle");
+                        circle.onclick = null;
+                        circle = Snap("#fancy_circle");
+                        var stroke = circle.select("#fancy_circle_stroke");
+                        stroke.attr({transform: "rotate(0,92,92)"});
+                        stroke.animate({stroke: '#'+Math.floor(Math.random()*16777215).toString(16)}, 500);
+                        stroke.animate({transform: "rotate(39,92,92)"}, 500, mina.linear);
+                        var bar1 = circle.select("#fancy_circle_ellipse1");
+                        var bar2 = circle.select("#fancy_circle_ellipse2");
+                        var bar3 = circle.select("#fancy_circle_ellipse3");
+                        
+                    }
+            </script>
+            <svg id="fancy_circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 184 184" onclick="animateFancyCircle()">
+                <title>fancy_circle</title>
+                <g id="_Group_" data-name="&lt;Group&gt;">
+                    <circle id="fancy_circle_stroke" cx="92" cy="92" r="90" style="fill:none;stroke:#27aae1;stroke-miterlimit:10;stroke-width:4px;stroke-dasharray:11.9684476852417,8.976335525512695"/>
+                </g>
+                <path id="fancy_circle_center" d="M288,288c39.5,0,72,32.5,72,72s-32.5,72-72,72-72-32.5-72-72S248.5,288,288,288Z" transform="translate(-196 -268)" style="fill:#ed1c24"/>
+                <path id="fancy_circle_ellipse1" d="M270,332v56c0,4.39-4.06,8-9,8s-9-3.61-9-8V332c0-4.39,4.06-8,9-8S270,327.61,270,332Z" transform="translate(-196 -268)" style="fill:#fff"/>
+                <path id="fancy_circle_ellipse2" d="M297,332v56c0,4.39-4.06,8-9,8s-9-3.61-9-8V332c0-4.39,4.06-8,9-8S297,327.61,297,332Z" transform="translate(-196 -268)" style="fill:#fff"/>
+                <path id="fancy_circle_ellipse3" d="M324,332v56c0,4.39-4.06,8-9,8s-9-3.61-9-8V332c0-4.39,4.06-8,9-8S324,327.61,324,332Z" transform="translate(-196 -268)" style="fill:#fff"/>
+            </svg>
+        </div>
+	</body>
+</html>

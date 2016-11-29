@@ -1,0 +1,83 @@
+html, body {
+	height: 100%;
+}
+.bg-home {
+	background-size: cover;
+}
+.bg-page1 {
+	/*background: url(https://upload.wikimedia.org/wikipedia/commons/5/51/Mandarin.duck.arp.jpg);*/
+	background-size: cover;
+}
+
+.center-all {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.center-vertical{
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+}
+
+
+.center-horizontal{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.white{
+	background: white;
+}
+
+.svg-circle{
+    /*fill:blue */
+}
+
+.svg-circle-div{
+    height: 200px;
+    width: 200px;
+}
+
+svg{
+    fill: green;
+}
+
+#name-div{
+    position: relative;
+    background-color: red;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    height: 250px;
+    width: 100%;
+}
+#name-div svg{
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px;
+    
+}
+#name-div svg path{
+    position: relative;
+    display: inline-block;
+    float: left;
+    width: auto;
+}
+#name-div svg line{
+    position: relative;
+    display: inline-block;
+    float: left;
+    width: auto;
+}
+.letter{
+    position: absolute;
+    left: 0px;
+    max-height: 100%;
+}
+
